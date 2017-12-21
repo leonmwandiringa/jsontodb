@@ -10,15 +10,17 @@
 
     Class HtmlStripperController extends LocalesHelper{
 
-        protected $Url = "https://www.xbox.com/";
+        protected $url = "https://www.xbox.com/";
+        protected $html_result;
 
         private function runExec($request, $response){
+            return "fd";
+            //$this->html_result = file_get_html($url);
+            //return $this->html_result;
+            // foreach(parent::getLocales() AS $key=>$value){
 
 
-            foreach(parent::getLocales() AS $key=>$value){
-
-
-            }
+            // }
         }
 
     }
