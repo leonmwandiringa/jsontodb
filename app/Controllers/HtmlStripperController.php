@@ -7,17 +7,28 @@
  */
     namespace DealsWithGold\Controllers;
     use DealsWithGold\Helpers\LocalesHelper;
-    use Sunra\PhpSimple\HtmlDomParser;
+    use Slim\Views\Twig;
+    // use Sunra\PhpSimple\HtmlDomParser;
 
     Class HtmlStripperController extends LocalesHelper{
 
         protected $url = "https://www.xbox.com/";
-        protected $html_result;
+        public $view;
+        public $html_result;
+
+        public function __construct($view){
+
+            $this->view = $view;
+        }
+
+        public function runFileStripper($request, $response){
+
+                return $this->view->render($response, "filestripper.twig");
+
+        }
 
         public function runExec($request, $response){
-            //return "fd";
-            $this->html_result = HtmlDomParser::file_get_html($this->url);
-            return $this->html_result;
+           
             // foreach(parent::getLocales() AS $key=>$value){
 
 

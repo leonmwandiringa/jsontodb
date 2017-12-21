@@ -2,10 +2,7 @@
 
     $app->get("/lstp", "HtmlStripperController:runExec");
 
-    $app->get("/", function(){
-
-        return "yep";
-    });
+    $app->get("/", "HtmlStripperController:runFileStripper");
 
 
 ?>
