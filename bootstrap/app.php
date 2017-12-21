@@ -15,16 +15,12 @@
 
     );
 
-
     $container = $app->getContainer();
 
     //dependency injection for views rendering
     $container['view'] = function($container){
         
-        $view = new \Slim\Views\Twig(['resources/views', [
-            'cache'=>false
-        ]]);
-
+        $view = new \Slim\Views\Twig(['resources/views']);
 
         return $view;
         

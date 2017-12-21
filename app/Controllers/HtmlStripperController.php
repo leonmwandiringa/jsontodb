@@ -23,16 +23,20 @@
 
         public function runFileStripper($request, $response){
 
-                return $this->view->render($response, "filestripper.twig");
+                return $this->view->render($response, "filestripper.php");
 
         }
 
-        public function runExec($request, $response){
+        public function runHtmlFetch($request, $response){
            
             // foreach(parent::getLocales() AS $key=>$value){
 
 
             // }
+        }
+        public function insertData($request, $response, $args){
+
+
         }
 
     }
