@@ -1,6 +1,13 @@
 <?php
 
-    $app->post("/fetch/{locale}", "HtmlStripperController:runHtmlFetch");
+    $app->post("/fetch", "HtmlStripperController:runHtmlFetch");
+
+    $app->post("/json", "HtmlStripperController:runJsonFetch");
+
+    // $app->post("/json", function($request, $respnse){
+
+    //     echo $request->getParsedBody()['url'];
+    //  });
 
     $app->get("/", function($request, $response){
 
@@ -8,7 +15,7 @@
 
     });
 
-    $app->post("/insert/{data}", "HtmlStripperController:insertData");
+    $app->post("/insert/{locale}/{pagedata}", "HtmlStripperController:insertData");
 
 
 

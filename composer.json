@@ -3,7 +3,6 @@
     "require":{
 
         "slim/slim":"^3.9",
-        "sunra/php-simple-html-dom-parser": "1.5.2",
         "slim/twig-view": "^2.3"
 
     },
