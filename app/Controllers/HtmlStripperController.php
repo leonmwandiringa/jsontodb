@@ -7,11 +7,11 @@
  */
     namespace DealsWithGold\Controllers;
     use DealsWithGold\Helpers\LocalesHelper;
-    use DealsWithGold\Models\DbRun;
+    use DealsWithGold\Models\Xboxone;
     use Slim\Views\Twig;
     // use Sunra\PhpSimple\HtmlDomParser;
 
-    Class HtmlStripperController extends LocalesHelper{
+    Class HtmlStripperController extends Controller{
 
         protected $url = "https://www.xbox.com/";
         protected $query_string = "/live/deals-with-gold";
@@ -21,13 +21,14 @@
         public $html_result;
         public $json_result;
         public $json_obj;
+        public $dbconn;
         public $xbox1_game_count;
         public $xbox360_game_count;
 
-        public function __construct($view){
+        // public function __construct($view){
 
-            $this->view = $view;
-        }
+        //     $this->view = $view;
+        // }
 
         public function runFileStripper($request, $response){
 
@@ -49,27 +50,41 @@
             $jsonurl = $request->getParsedBody()['url'];
             //echo $jsonurl;
              $this->json_result = "{".preg_replace('/globalContent = {/', '"globalContent":{', file_get_contents($jsonurl))."}";
-             $this->json_obj = json_decode($this->json_result);
+             $this->json_obj = json_decode($this->json_result, true);
              //$obj_count = $this->json_obj->globalContent->locales->en
              $dn = "en-gb";
-             $this->xbox1_game_count = $this->json_obj->globalContent->locales->$dn->keyXboxonenumber;
-             $this->xbox360_game_count = $this->json_obj->globalContent->locales->$dn->keyXbox360number;
-             foreach(parent::$_locales AS $locall => $locc){
-
-                $localeIns = $this->json_obj->globalContent->locales->$locc;
-                return self::insertData("SELECT * FROM xboxone");
-
-             }
+             //count items
+             $this->xbox1_game_count = $this->json_obj['globalContent']['locales'][$dn]['keyXboxonenumber'];
+             $this->xbox360_game_count = $this->json_obj['globalContent']['locales'][$dn]['keyXbox360number'];
+             $this->executeObject();
+             //$this->executeObject();
              
         }
-        public static function insertData($localeIns){
 
-            DbRun::runQuery($localeIns);
-            // for($lg = 0; $lg <= $this->xbox1_game_count; $lg++){
+        public function executeObject(){
 
-                
+            $reg_rep = ["/: /","/ /"];
+            $localeIns = "";
+            foreach(parent::$_locales AS $locall => $locc){
+               
+               $localeIns = $this->json_obj['globalContent']['locales'][$locc];
+              // return $localeIns;
+              return Xboxone::all();
+                // for($qty=1; $qty<=$this->xbox1_game_count; $qty++){
 
-            // }
+                //     $this->runData("INSERT INTO xboxOne(game_name, game_bigid, game_data_click_name, game_discount, game_include, game_exclude) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+                //     [$localeIns['keyX1gamename'.$qty], $localeIns['keyX1gamebigid'.$qty], $localeIns['keyX1gameofftext'.$qty], $localeIns['keyX1gameinclude'.$qty], $localeIns['keyX1gameexclude'.$qty]]);
+               
+                // }
+
+            }
+
+        }
+
+        public function runData($localeIns, $params = array()){
+            $this->dbconn = $this->db->prepare($localeIns);
+            $this->dbconn->execute($params);
+            return $this->dbconn;
 
         }
 

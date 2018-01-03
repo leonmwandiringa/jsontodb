@@ -9,16 +9,18 @@
         [
             "settings"=>[
                 "displayErrorDetails"=>true,
-                "cache"=>false
-            ],["db"=>
-
-            [
-                "name"=>"dealswithgold", 
-                "host"=>"localhost", 
-                "user"=>"dealswithgold", 
-                "password"=>"Dealswithgold1"
+                "cache"=>false,
+                'db' => [
+                    'driver' => 'mysql',
+                    'host' => 'localhost',
+                    'database' => 'dealswithgold',
+                    'username' => 'dealswithgold',
+                    'password' => 'Dealswithgold1',
+                    'charset'   => 'utf8',
+                    'collation' => 'utf8_unicode_ci',
+                    'prefix'    => '',
                 ]
-            
+
             ]
         ]
 
@@ -35,18 +37,33 @@
         
     };
 
-    //add pdo to container
-    $container['db'] = function($container){
-
-        $db = $container['db'];
-
-        $pdo = new PDO("mysql:host=".$db['host'].";dbname=".$db['name'], $db['user'], $db['password']);
-        $pdo->setAttribute(PDO::ATT_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $pdo->setAttribute(PDO::DEFUALT_FETCH_MODE, PDO::FETCH_OBJ);
-
-        return $pdo;
-
+    $capsule = new \Illuminate\Database\Capsule\Manager;
+    $capsule->addConnection($container['settings']['db']);
+    $capsule->setAsGlobal();
+    $capsule->bootEloquent();
+    
+    $container['db'] = function ($container) {
+        return $capsule;
     };
+    
+    //add pdo to container
+    // $container['db'] = function($container){
+
+    //     $db = $container['settings']['db'];
+
+    //     $pdo = new PDO("mysql:host=".$db['host'].";dbname=".$db['name'], $db['user'], $db['password']);
+    //     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    //     $pdo->setAttribute(PDO::DEFUALT_FETCH_MODE, PDO::FETCH_OBJ);
+
+    //     return $pdo;
+
+    // };
+
+    // $container['dbMaster'] = function($container){
+
+    //     return new \DealsWithGold\Models\DbRun($container);
+
+    // };
     //dependncy injection for stripper controller
     $container['HtmlStripperController'] = function($container){
 

@@ -22,7 +22,7 @@ class Controller extends LocalesHelper{
 
         if($this->container->{property}){
 
-            return $this->container->{property}
+            return $this->container->{property};
         }
 
     }

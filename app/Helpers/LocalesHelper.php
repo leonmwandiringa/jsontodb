@@ -67,7 +67,7 @@
 
         }
 
-        public static function getSingleLocale($locale){
+        public function getSingleLocale($locale){
 
             return self::$_locales[$locale];
         }

@@ -2,7 +2,7 @@
 
     namespace DealsWithGold\Models;
     use DealsWithGold\Models\DbConfig;
-    Class DbRun{
+    Class DbRun extends Model{
 
         public static $_instance = null;
         public static function getInstance(){
@@ -17,13 +17,22 @@
 
         }
 
-        public static function runQuery($sql, $params = null){
+        // public static function runQuery($sql, $params = null){
 
-            $query_run = self::getInstance()->prepare($sql);
-            $params == null ? $query_run->execute($params) : $query_run->execute();
+        //     $query_run = self::getInstance()->prepare($sql);
+        //     $params == null ? $query_run->execute($params) : $query_run->execute();
             
-            return $query_run;
+        //     return $query_run;
 
+        // }
+        //native pdo execution
+        public function runNativeQuery($sql, $params = null){
+            
+            $query_run =  $this->db->prepare($sql);
+            $params == null ? $query_run->execute($params) : $query_run->execute();
+                        
+            return $query_run;
+            
         }
 
     }
