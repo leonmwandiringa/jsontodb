@@ -66,17 +66,20 @@
             $reg_rep = ["/: /","/ /"];
             $localeIns = "";
             foreach(parent::$_locales AS $locall => $locc){
-               
+                //$qty=1;
                $localeIns = $this->json_obj['globalContent']['locales'][$locc];
               // return $localeIns;
-              return Xboxone::all();
-                // for($qty=1; $qty<=$this->xbox1_game_count; $qty++){
+                
+                for($qty=1; $qty<=$this->xbox1_game_count; $qty++){
 
-                //     $this->runData("INSERT INTO xboxOne(game_name, game_bigid, game_data_click_name, game_discount, game_include, game_exclude) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-                //     [$localeIns['keyX1gamename'.$qty], $localeIns['keyX1gamebigid'.$qty], $localeIns['keyX1gameofftext'.$qty], $localeIns['keyX1gameinclude'.$qty], $localeIns['keyX1gameexclude'.$qty]]);
+                    Xboxone::create(["game_name"=>$localeIns["keyX1gamename$qty"],"game_locale"=>$locall, "game_bigid"=>$localeIns["keyX1gamebigid$qty"], 
+                    "game_discount"=>$localeIns["keyX1gameofftext$qty"], "game_include"=>$localeIns["keyX1gameinclude$qty"], 
+                    "game_exclude"=>$localeIns["keyX1gameexclude$qty"]]);
+                    // $this->runData("INSERT INTO xboxOne(game_name, game_bigid, game_data_click_name, game_discount, game_include, game_exclude) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+                    // [$localeIns['keyX1gamename'.$qty], $localeIns['keyX1gamebigid'.$qty], $localeIns['keyX1gameofftext'.$qty], $localeIns['keyX1gameinclude'.$qty], $localeIns['keyX1gameexclude'.$qty]]);
                
-                // }
-
+                }
+                //$qty++;
             }
 
         }
