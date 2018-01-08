@@ -7,10 +7,16 @@
 
         return [
             "paths" => [
-                "migrations" => "app/migrations"
+                "migrations" => "app/Migrations"
             ],
-            "template"=>"app/migrations/migrationtemplate.php",
-            "base_migration_class"=>"app/migrations/migration",
+
+            "migration_base_class"=>"DealsWithGold\Migrations\Core\Migration",
+
+            "templates"=>[
+
+                "file"=>"app/Migrations/Core/Migrationstub.php"
+            ],
+    
             "environments" => [
                 "default_migration_table" => "migrations",
                 "default" => [
