@@ -4,6 +4,8 @@
 
     $app->post("/json", "HtmlStripperController:runJsonFetch");
 
+    $app->get("/getgames", "HtmlStripperController:returnDbJson");
+
     // $app->post("/json", function($request, $respnse){
 
     //     echo $request->getParsedBody()['url'];

@@ -8,6 +8,8 @@
     namespace DealsWithGold\Controllers;
     use DealsWithGold\Helpers\LocalesHelper;
     use DealsWithGold\Models\Xboxone;
+    use DealsWithGold\Models\Xbox360;
+    use DealsWithGold\Models\XboxOneResources;
     use Slim\Views\Twig;
     // use Sunra\PhpSimple\HtmlDomParser;
 
@@ -56,38 +58,78 @@
              //count items
              $this->xbox1_game_count = $this->json_obj['globalContent']['locales'][$dn]['keyXboxonenumber'];
              $this->xbox360_game_count = $this->json_obj['globalContent']['locales'][$dn]['keyXbox360number'];
-             $this->executeObject();
+             $this->executeXboxOneGames();
+             $this->executeXbox360Games();
              //$this->executeObject();
              
         }
 
-        public function executeObject(){
+        public function executeXboxOneGames(){
 
-            $reg_rep = ["/: /","/ /"];
-            $localeIns = "";
-            foreach(parent::$_locales AS $locall => $locc){
-                //$qty=1;
-               $localeIns = $this->json_obj['globalContent']['locales'][$locc];
-              // return $localeIns;
-                
+              Xboxone::truncate();
+              $localeIns = $this->json_obj['globalContent']['locales']['en-gb'];
+
+              //run through the looped db
                 for($qty=1; $qty<=$this->xbox1_game_count; $qty++){
 
-                    Xboxone::create(["game_name"=>$localeIns["keyX1gamename$qty"],"game_locale"=>$locall, "game_bigid"=>$localeIns["keyX1gamebigid$qty"], 
+                    Xboxone::create(["game_name"=>$localeIns["keyX1gamename$qty"],"game_bigid"=>$localeIns["keyX1gamebigid$qty"], 
                     "game_discount"=>$localeIns["keyX1gameofftext$qty"], "game_include"=>$localeIns["keyX1gameinclude$qty"], 
                     "game_exclude"=>$localeIns["keyX1gameexclude$qty"]]);
-                    // $this->runData("INSERT INTO xboxOne(game_name, game_bigid, game_data_click_name, game_discount, game_include, game_exclude) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", 
-                    // [$localeIns['keyX1gamename'.$qty], $localeIns['keyX1gamebigid'.$qty], $localeIns['keyX1gameofftext'.$qty], $localeIns['keyX1gameinclude'.$qty], $localeIns['keyX1gameexclude'.$qty]]);
-               
+
                 }
-                //$qty++;
-            }
+                $getAllX1 = Xboxone::all();
+                foreach($getAllX1 AS $eachRowBrow){
+
+                    $this->excuteResourceDb($eachRowBro);
+
+                }
+        }
+
+        public function executeXbox360Games(){
+
+            Xbox360::truncate();
+            $localeInsl = $this->json_obj['globalContent']['locales']['en-gb'];
+            //run through the looped db
+              for($qtyy=1; $qtyy<=$this->xbox360_game_count; $qtyy++){
+                
+                    Xbox360::create(["game_name"=>$localeInsl["keyX360gamename$qtyy"],"game_link"=>$localeInsl["keyX360gameurl$qtyy"], "game_box_shot"=>$localeInsl["keyX360gameboxshot$qtyy"],
+                    "game_discount"=>$localeInsl["keyX360gameofftext$qtyy"], "game_include"=>$localeInsl["keyX360gameinclude$qtyy"], 
+                    "game_exclude"=>$localeInsl["keyX360gameexclude$qtyy"]]);
+
+              }
 
         }
 
-        public function runData($localeIns, $params = array()){
-            $this->dbconn = $this->db->prepare($localeIns);
-            $this->dbconn->execute($params);
-            return $this->dbconn;
+        //handle request from site
+        public function returnDbJson($request, $response){
+
+                //$reqlocale = $request->getParsedBodyParam("locale");
+
+                $xboxOne = Xboxone::all();
+                $xbo360 = Xbox360::all();
+
+                return $response->withJson(["xboxone"=>$xboxOne,"xbox360"=>$xbo360], 200);
+
+        }
+
+        public function returnDbLocaleJson($request, $response){
+            
+                $reqlocale = $request->getParsedBodyParam("locale");
+            
+                $xboxOne = Xboxone::all();
+                $xbo360 = Xbox360::all();
+            
+                return $response->withJson(["xboxone"=>$xboxOne,"xbox360"=>$xbo360], 200);
+            
+        }
+
+        public function excuteResourceDb($eachRowBro){
+            
+            $requestJsonFile = file_get_contents("https://displaycatalog.mp.microsoft.com/v7.0/products?bigIds=".$eachRowBrow->game_bigid."&market=gb&languages=en-gb&MS-CV=DGU1mcuYo0WMMp+F.1");
+            $resourceObjectFile = json_decode($requestJsonFile, true);
+            $resImage =  $resourceObjectFile['Products']['Images'][2]['Uri'];
+
+            XboxOneResources::create(["game_name"=>$eachRowBro->game_name, "game_bigid"=>$eachRowBro->game_bigid, "game_box_art"=>$resImage]);
 
         }
 

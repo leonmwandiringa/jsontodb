@@ -1,14 +1,14 @@
 <?php
 
 
-use $useClassName;
+use DealsWithGold\Migrations\Core\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class $className extends $baseClassName
+class CreateXboxOneTable extends Migration
 {
     public function up(){
 
-        $this->schema->create('', function(Blueprint $table){
+        $this->schema->create('xboxone', function(Blueprint $table){
 
             $table->increments("id");
             $table->string("game_name", 250);
@@ -26,7 +26,7 @@ class $className extends $baseClassName
 
     public function down(){
 
-        $this->schema->drop('');
+        $this->schema->drop('xboxone');
 
     }
 }

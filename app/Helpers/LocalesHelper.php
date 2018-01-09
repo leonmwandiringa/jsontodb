@@ -19,7 +19,6 @@
             "de-ch"=>"de-ch",
             "de-de"=>"de-de",
             "el-gr"=>"el-gr",
-            "en-ae"=>"en-ae",
             "en-au"=>"en-au",
             "en-ca"=>"en-ca",
             "en-gb"=>"en-gb",
@@ -67,7 +66,7 @@
 
         }
 
-        public function getSingleLocale($locale){
+        public static function getSingleLocale($locale){
 
             return self::$_locales[$locale];
         }

@@ -4,19 +4,16 @@
 use DealsWithGold\Migrations\Core\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class EnUs extends Migration
+class CreateXboxOneResourceTable extends Migration
 {
     public function up(){
 
-        $this->schema->create('en-us', function(Blueprint $table){
+        $this->schema->create('x1resources', function(Blueprint $table){
 
             $table->increments("id");
             $table->string("game_name", 250);
             $table->string("game_bigid", 250);
-            $table->string("game_link", 250);
-            $table->string("game_data_click_name", 250);
-            $table->string("game_include", 250);
-            $table->string("game_exclude", 250);
+            $table->string("game_box_art", 250)->nullable();
             $table->timestamps();
 
         });
@@ -25,7 +22,7 @@ class EnUs extends Migration
 
     public function down(){
 
-        $this->schema->drop('en-us');
+        $this->schema->drop('x1resources');
 
     }
 }
