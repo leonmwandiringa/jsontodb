@@ -60,6 +60,7 @@
              $this->xbox360_game_count = $this->json_obj['globalContent']['locales'][$dn]['keyXbox360number'];
              $this->executeXboxOneGames();
              $this->executeXbox360Games();
+             $this>excuteXboxOneResourceDb();
              //$this->executeObject();
              
         }
@@ -77,12 +78,7 @@
                     "game_exclude"=>$localeIns["keyX1gameexclude$qty"]]);
 
                 }
-                $getAllX1 = Xboxone::all();
-                foreach($getAllX1 AS $eachRowBrow){
-
-                    $this->excuteResourceDb($eachRowBro);
-
-                }
+                
         }
 
         public function executeXbox360Games(){
@@ -123,14 +119,20 @@
             
         }
 
-        public function excuteResourceDb($eachRowBro){
+        //run through the saved xbox games for resource fetching
+        public function excuteXboxOneResourceDb(){
+
+            $getAllX1 = Xboxone::all();
+            foreach($getAllX1 AS $eachRowBrow){
+
+                $requestJsonFile = file_get_contents("https://displaycatalog.mp.microsoft.com/v7.0/products?bigIds=".$eachRowBrow->game_bigid."&market=gb&languages=en-gb&MS-CV=DGU1mcuYo0WMMp+F.1");
+                $resourceObjectFile = json_decode($requestJsonFile, true);
+                $resImage =  $resourceObjectFile['Products']['Images'][2]['Uri'];
+
+                XboxOneResources::create(["game_name"=>$eachRowBro->game_name, "game_bigid"=>$eachRowBro->game_bigid, "game_box_art"=>$resImage]);
+
             
-            $requestJsonFile = file_get_contents("https://displaycatalog.mp.microsoft.com/v7.0/products?bigIds=".$eachRowBrow->game_bigid."&market=gb&languages=en-gb&MS-CV=DGU1mcuYo0WMMp+F.1");
-            $resourceObjectFile = json_decode($requestJsonFile, true);
-            $resImage =  $resourceObjectFile['Products']['Images'][2]['Uri'];
-
-            XboxOneResources::create(["game_name"=>$eachRowBro->game_name, "game_bigid"=>$eachRowBro->game_bigid, "game_box_art"=>$resImage]);
-
+            }
         }
 
     }
