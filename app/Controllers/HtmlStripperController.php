@@ -70,7 +70,7 @@
 
                     Xboxone::create(["game_name"=>$localeIns["keyX1gamename$qty"], "game_aria_label"=>"Learn More about ".$localeIns["keyX1gamename$qty"], "game_bigid"=>$localeIns["keyX1gamebigid$qty"], 
                     "game_discount"=>$localeIns["keyX1gameofftext$qty"], "game_include"=>$localeIns["keyX1gameinclude$qty"], 
-                    "game_exclude"=>$localeIns["keyX1gameexclude$qty"]]);
+                    "game_exclude"=>$localeIns["keyX1gameexclude$qty"], "game_data_click_name"=>"www>live>deals-with-gold>".preg_replace("/ /","-",preg_replace("/: /","-",$localeIns["keyX1gamename$qty"])).">click"]);
 
                 }
                 
@@ -104,7 +104,7 @@
                     $resImage = $resourceObjectFile['Products'][0]['LocalizedProperties'][0]['Images'][1]['Uri'];
                     $this->bigIdimg[$eachRowBro->game_bigid] = $resImage;
                     //$ary = array_map('strval', $this->bigIdimg);
-                    XboxOneResources::create(["game_name"=>$eachRowBro->game_name, "game_aria_label"=>$eachRowBro->game_aria_label, "game_bigid"=>$eachRowBro->game_bigid, "game_box_art"=>$this->bigIdimg[$eachRowBro->game_bigid], "game_include"=>$eachRowBro->game_include, "game_exclude"=>$eachRowBro->game_exclude, "game_discount"=>$eachRowBro->game_discount]);
+                    XboxOneResources::create(["game_name"=>$eachRowBro->game_name, "game_aria_label"=>$eachRowBro->game_aria_label, "game_bigid"=>$eachRowBro->game_bigid, "game_box_art"=>$this->bigIdimg[$eachRowBro->game_bigid], "game_include"=>$eachRowBro->game_include, "game_exclude"=>$eachRowBro->game_exclude, "game_discount"=>$eachRowBro->game_discount, "game_data_click_name"=>$eachRowBro->game_data_click_name]);
 
                 }
 
